@@ -1,26 +1,75 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --font-serif: 'Playfair Display', Georgia, Cambria, 'Times New Roman', serif;
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background-color: #F8F5EF;
+    color: #26231F;
+    font-family: var(--font-sans);
+    overflow-x: hidden;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.font-serif-luxury {
+  font-family: var(--font-serif);
 }
+
+/* Custom Luxury Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F8F5EF;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #DED6C8;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #B58A3A;
+}
+
+/* Book Cover Shadow & Hover Effects */
+.book-shadow {
+  box-shadow: 0 8px 24px -6px rgba(74, 54, 40, 0.12),
+              0 2px 6px -2px rgba(38, 35, 31, 0.06);
+}
+
+.book-card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.book-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px -8px rgba(74, 54, 40, 0.16),
+              0 4px 12px -3px rgba(181, 138, 58, 0.15);
+}
+
+/* Accent Utilities */
+.gold-accent-text {
+  color: #B58A3A;
+}
+
+.brown-accent-text {
+  color: #4A3628;
+}
+
+/* Luxury Cards */
+.card-luxury {
+  background-color: #FFFDF8;
+  border: 1px solid #DED6C8;
+}
+
+.card-accent-luxury {
+  background-color: #F1ECE2;
+  border: 1px solid #DED6C8;
+}
+
