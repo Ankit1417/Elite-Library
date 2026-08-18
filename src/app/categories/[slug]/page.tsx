@@ -21,6 +21,8 @@ interface BookData {
   finalPrice: number;
   stockQuantity: number;
   category?: { name: string; slug: string };
+  averageRating?: number;
+  reviewCount?: number;
 }
 
 interface CategoryDetail {
@@ -66,6 +68,8 @@ export default function CategoryPage({
               finalPrice: b.finalPrice,
               stockQuantity: b.stockQuantity,
               categoryName: b.category?.name,
+              averageRating: b.averageRating,
+              reviewCount: b.reviewCount,
             }))
           );
         }

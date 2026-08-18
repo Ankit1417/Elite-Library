@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useState, useTransition } from "react";
 import { useSearchParams } from "next/navigation";
 import { fetchApi } from "@/lib/api";
+import { getCategories } from "@/lib/categories";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BookGrid from "@/components/BookGrid";
@@ -22,6 +23,8 @@ interface BookData {
   finalPrice: number;
   stockQuantity: number;
   category?: { name: string; slug: string };
+  averageRating?: number;
+  reviewCount?: number;
 }
 
 function BooksCatalogContent() {
@@ -51,8 +54,8 @@ function BooksCatalogContent() {
   useEffect(() => {
     async function loadCategories() {
       try {
-        const res = await fetchApi<CategoryItem[]>("/categories");
-        if (res.success) setCategories(res.data);
+        const data = await getCategories();
+        setCategories(data);
       } catch (err) {
         console.error("Failed to load categories", err);
       }
@@ -94,6 +97,8 @@ function BooksCatalogContent() {
               finalPrice: b.finalPrice,
               stockQuantity: b.stockQuantity,
               categoryName: b.category?.name,
+              averageRating: b.averageRating,
+              reviewCount: b.reviewCount,
             }))
           );
           setTotalBooks(res.data.total);

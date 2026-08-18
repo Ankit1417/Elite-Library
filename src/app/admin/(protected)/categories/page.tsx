@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { fetchApi } from "@/lib/api";
+import { clearCategoryCache } from "@/lib/categories";
 import { Edit, FolderPlus, Trash2, Plus } from "lucide-react";
 
 interface CategoryItem {
@@ -113,6 +114,7 @@ export default function AdminCategoriesPage() {
       }
 
       if (res.success) {
+        clearCategoryCache();
         resetForm();
         fetchCategories();
       } else {
@@ -132,6 +134,7 @@ export default function AdminCategoriesPage() {
     try {
       const res = await fetchApi(`/categories/${id}`, { method: "DELETE" });
       if (res.success) {
+        clearCategoryCache();
         fetchCategories();
       } else {
         alert(res.message || "Failed to delete category");

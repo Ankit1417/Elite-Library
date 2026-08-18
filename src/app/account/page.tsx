@@ -6,7 +6,9 @@ import { useRouter } from "next/navigation";
 import {
   Bell,
   CakeSlice,
+  ChevronRight,
   Gift,
+  Heart,
   LogOut,
   Package,
   ShoppingBag,
@@ -16,6 +18,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { fetchApi } from "@/lib/api";
 import { Customer, useAuth } from "@/lib/authContext";
+import { useWishlist } from "@/lib/wishlistContext";
+import { useCart } from "@/lib/cartContext";
 
 function dateInputValue(value?: string | null) {
   return value ? value.slice(0, 10) : "";
@@ -78,53 +82,61 @@ function BirthdayRewardsForm({ customer }: { customer: Customer }) {
   return (
     <section
       id="birthday-rewards"
-      className="scroll-mt-28 rounded-2xl border border-[#B58A3A]/30 bg-[#F8F5EF] p-5 sm:p-6"
+      className="scroll-mt-28 rounded-2xl border border-[#DED6C8] bg-[#FFFDF8] p-5"
       aria-labelledby="birthday-rewards-heading"
     >
       <div className="flex items-start gap-3">
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#4A3628] text-[#F8F5EF]">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#B58A3A]/15 text-[#B58A3A]">
           <CakeSlice className="h-5 w-5" aria-hidden="true" />
-        </div>
+        </span>
         <div>
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#B58A3A]">
             A gift for your special day
           </p>
           <h2
             id="birthday-rewards-heading"
-            className="font-serif-luxury text-xl font-bold text-[#26231F]"
+            className="font-serif-luxury text-lg font-bold text-[#26231F]"
           >
             Birthday Rewards
           </h2>
-          <p className="mt-1 text-sm leading-6 text-[#6F6A61]">
-            Add your birthday and receive a special birthday gift from Elite Library.
-          </p>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="mt-5 space-y-4">
-        <div>
-          <label htmlFor="dateOfBirth" className="mb-1.5 block text-xs font-semibold text-[#4A3628]">
-            Date of birth
-          </label>
-          <input
-            id="dateOfBirth"
-            name="dateOfBirth"
-            type="date"
-            required
-            max={todayInputValue()}
-            value={dateOfBirth}
-            onChange={(event) => setDateOfBirth(event.target.value)}
-            className="w-full max-w-sm rounded-xl border border-[#DED6C8] bg-[#FFFDF8] px-3.5 py-2.5 text-sm text-[#26231F] outline-none transition focus:border-[#B58A3A] focus:ring-2 focus:ring-[#B58A3A]/20"
-          />
-          {customer.birthdayUpdatedAt && (
-            <p className="mt-1.5 text-[11px] text-[#6F6A61]">
-              Last updated {new Date(customer.birthdayUpdatedAt).toLocaleDateString()}. For your
-              protection, birthday changes are limited by the account security policy.
-            </p>
-          )}
+      <p className="mt-2 text-sm leading-5 text-[#6F6A61]">
+        Add your birthday and receive a special birthday gift from Elite Library.
+      </p>
+
+      <form onSubmit={handleSubmit} className="mt-4 space-y-3">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
+          <div className="flex-1">
+            <label
+              htmlFor="dateOfBirth"
+              className="mb-1.5 block text-xs font-semibold text-[#4A3628]"
+            >
+              Date of birth
+            </label>
+            <input
+              id="dateOfBirth"
+              name="dateOfBirth"
+              type="date"
+              required
+              max={todayInputValue()}
+              value={dateOfBirth}
+              onChange={(event) => setDateOfBirth(event.target.value)}
+              className="w-full rounded-xl border border-[#DED6C8] bg-[#FFFDF8] px-3.5 py-2.5 text-sm text-[#26231F] outline-none transition focus:border-[#B58A3A] focus:ring-2 focus:ring-[#B58A3A]/20"
+            />
+          </div>
+
+<button
+            type="submit"
+            disabled={isSaving}
+            className="rounded-xl bg-[#4A3628] px-5 py-2.5 text-xs font-bold text-[#FFFDF8] shadow-sm transition-colors hover:bg-[#352D27] focus:outline-none focus:ring-2 focus:ring-[#B58A3A] focus:ring-offset-2 disabled:cursor-wait disabled:opacity-60"
+          >
+            {isSaving ? "Saving..." : "Save Birthday"}
+          </button>
         </div>
 
-        <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-[#DED6C8] bg-[#FFFDF8] p-3.5">
+        <label className="flex cursor-pointer items-start gap-2.5 pt-1">
           <input
             type="checkbox"
             checked={birthdayOffersEnabled}
@@ -132,8 +144,8 @@ function BirthdayRewardsForm({ customer }: { customer: Customer }) {
             className="mt-0.5 h-4 w-4 accent-[#B58A3A]"
           />
           <span>
-            <span className="block text-xs font-bold text-[#26231F]">
-              Notify me about birthday offers and special deals.
+            <span className="block text-xs font-semibold text-[#26231F]">
+              Notify me about birthday offers and special deals
             </span>
             <span className="mt-0.5 block text-[11px] leading-4 text-[#6F6A61]">
               You can opt out at any time without removing your birthday.
@@ -141,34 +153,71 @@ function BirthdayRewardsForm({ customer }: { customer: Customer }) {
           </span>
         </label>
 
-        <div aria-live="polite">
+        {customer.birthdayUpdatedAt && (
+          <p className="text-[11px] italic text-[#6F6A61]">
+            Last updated {new Date(customer.birthdayUpdatedAt).toLocaleDateString()}.
+            Birthday changes are limited by the account security policy.
+          </p>
+        )}
+
+        <div aria-live="polite" className="space-y-2">
           {error && (
-            <p role="alert" className="rounded-xl border border-[#8C2D19]/25 bg-[#FFF4F1] p-3 text-xs text-[#8C2D19]">
+            <p
+              role="alert"
+              className="rounded-lg border border-[#8C2D19]/25 bg-[#FFF4F1] px-3 py-2 text-xs text-[#8C2D19]"
+            >
               {error}
             </p>
           )}
           {success && (
-            <p className="rounded-xl border border-[#2E7D32]/25 bg-[#F3FAF3] p-3 text-xs text-[#2E7D32]">
+            <p className="rounded-lg border border-[#2E7D32]/25 bg-[#F3FAF3] px-3 py-2 text-xs text-[#2E7D32]">
               {success}
             </p>
           )}
         </div>
-
-        <button
-          type="submit"
-          disabled={isSaving}
-          className="rounded-xl bg-[#4A3628] px-5 py-2.5 text-xs font-bold text-[#FFFDF8] shadow-sm transition-colors hover:bg-[#352D27] focus:outline-none focus:ring-2 focus:ring-[#B58A3A] focus:ring-offset-2 disabled:cursor-wait disabled:opacity-60"
-        >
-          {isSaving ? "Saving preferences..." : "Save Birthday Rewards"}
-        </button>
       </form>
     </section>
+  );
+}
+
+function ShortcutItem({
+  href,
+  label,
+  icon: Icon,
+  count,
+}: {
+  href: string;
+  label: string;
+  icon: typeof User;
+  count?: number;
+}) {
+  return (
+    <Link
+      href={href}
+      className="group flex items-center gap-3 rounded-xl border border-transparent px-2.5 py-2 transition-all duration-200 hover:border-[#B58A3A]/40 hover:bg-[#F8F5EF] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B58A3A]"
+    >
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#B58A3A]/10 text-[#B58A3A]">
+        <Icon className="h-4 w-4" aria-hidden="true" />
+      </span>
+      <span className="flex-1 text-sm font-semibold text-[#26231F]">{label}</span>
+      {typeof count === "number" && count > 0 && (
+        <span className="rounded-full bg-[#B58A3A]/15 px-2 py-0.5 text-[11px] font-bold text-[#B58A3A]">
+          {count}
+        </span>
+      )}
+      <ChevronRight
+        className="h-4 w-4 text-[#B58A3A] transition-transform duration-200 group-hover:translate-x-0.5"
+        aria-hidden="true"
+      />
+    </Link>
   );
 }
 
 export default function AccountPage() {
   const router = useRouter();
   const { customer, isAuthenticated, isLoading: authLoading, logout } = useAuth();
+  const { wishlistIds } = useWishlist();
+  const { totalItems: cartCount } = useCart();
 
   const handleLogout = async () => {
     await logout();
@@ -205,76 +254,113 @@ export default function AccountPage() {
   return (
     <div className="min-h-screen bg-[#F1ECE2] text-[#26231F] flex flex-col">
       <Navbar />
-      <main className="w-full max-w-5xl flex-1 mx-auto px-4 py-10 sm:px-6 sm:py-12">
-        <div className="overflow-hidden rounded-3xl border border-[#DED6C8] bg-[#FFFDF8] shadow-xl">
-          <div className="bg-[#2B1F16] p-7 text-[#FFFDF8] sm:p-9">
-            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#B58A3A]">
-              Your private library
-            </p>
-            <h1 className="font-serif-luxury mt-1 text-3xl font-bold">My Account</h1>
-            <p className="mt-1 text-sm text-[#DED6C8]">Welcome back, {customer.name}.</p>
-          </div>
-
-          <div className="space-y-8 p-6 sm:p-8">
-            <section className="flex items-start gap-4" aria-labelledby="profile-heading">
-              <div className="w-12 h-12 rounded-full bg-[#F8F5EF] border border-[#DED6C8] flex items-center justify-center flex-shrink-0">
-                <User className="w-6 h-6 text-[#B58A3A]" aria-hidden="true" />
+      <main className="w-full max-w-[1200px] flex-1 mx-auto px-4 py-8 sm:px-6 sm:py-10">
+        <div className="overflow-hidden rounded-3xl border border-[#DED6C8] bg-[#FFFDF8] shadow-sm">
+          {/* Header */}
+          <header className="bg-[#2B1F16] px-6 py-6 text-[#FFFDF8] sm:px-8 sm:py-7">
+            <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#B58A3A]">
+                  Your private library
+                </p>
+                <h1 className="font-serif-luxury mt-1 text-3xl font-bold sm:text-4xl">
+                  My Account
+                </h1>
               </div>
-              <div className="flex-1">
-                <h2 id="profile-heading" className="font-serif-luxury text-xl font-bold text-[#26231F] mb-2">
-                  Profile Information
-                </h2>
-                <div className="space-y-2 text-sm">
-                  <p><span className="text-[#6F6A61]">Name:</span>{" "}<span className="font-medium">{customer.name}</span></p>
-                  <p><span className="text-[#6F6A61]">Phone:</span>{" "}<span className="font-medium">{customer.phone}</span></p>
-                  {customer.email && (
-                    <p><span className="text-[#6F6A61]">Email:</span>{" "}<span className="font-medium">{customer.email}</span></p>
-                  )}
-                </div>
-              </div>
-            </section>
-
-            <BirthdayRewardsForm
-              key={`${customer.id}:${customer.dateOfBirth ?? "none"}:${customer.birthdayOffersEnabled}`}
-              customer={customer}
-            />
-
-            <section aria-labelledby="account-shortcuts-heading">
-              <h2 id="account-shortcuts-heading" className="font-serif-luxury mb-3 text-lg font-bold">
-                Your Elite Library
-              </h2>
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                {[
-                  { href: "/orders", label: "My Orders", icon: ShoppingBag },
-                  { href: "/coupons", label: "My Coupons", icon: Gift },
-                  { href: "/notifications", label: "Notifications", icon: Bell },
-                  { href: "/cart", label: "My Cart", icon: Package },
-                ].map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="flex items-center gap-3 rounded-xl border border-[#DED6C8] bg-[#F8F5EF] p-4 transition-colors hover:border-[#B58A3A]/50 hover:bg-[#F1ECE2]"
-                    >
-                      <Icon className="h-5 w-5 text-[#B58A3A]" aria-hidden="true" />
-                      <span className="text-sm font-semibold">{item.label}</span>
-                    </Link>
-                  );
-                })}
-              </div>
-            </section>
-
-            <div className="border-t border-[#DED6C8] pt-6">
-              <button
-                type="button"
-                onClick={handleLogout}
-                className="flex items-center gap-2 font-medium text-[#8C2D19] transition-colors hover:text-[#681F12]"
-              >
-                <LogOut className="h-4 w-4" aria-hidden="true" />
-                Sign Out
-              </button>
+              <p className="pb-1 text-sm text-[#DED6C8]">
+                Welcome back,{" "}
+                <span className="font-semibold text-[#FFFDF8]">{customer.name}.</span>
+              </p>
             </div>
+          </header>
+
+          {/* Dashboard */}
+          <div className="grid gap-6 p-5 sm:p-6 lg:grid-cols-[1.8fr_1fr]">
+            {/* Left column */}
+            <div className="min-w-0 space-y-6">
+              {/* Profile Information */}
+              <section
+                className="rounded-2xl border border-[#DED6C8] bg-[#FFFDF8] p-5"
+                aria-labelledby="profile-heading"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#DED6C8] bg-[#F8F5EF]">
+                    <User className="h-5 w-5 text-[#B58A3A]" aria-hidden="true" />
+                  </span>
+                  <div>
+                    <h2
+                      id="profile-heading"
+                      className="font-serif-luxury text-lg font-bold text-[#26231F]"
+                    >
+                      Profile Information
+                    </h2>
+                    <p className="text-xs text-[#6F6A61]">Your contact details</p>
+                  </div>
+                </div>
+
+                <dl className="mt-3 divide-y divide-[#DED6C8]/70">
+                  <div className="flex items-center justify-between gap-4 py-2.5">
+                    <dt className="text-sm text-[#6F6A61]">Name</dt>
+                    <dd className="text-sm font-medium text-[#26231F]">{customer.name}</dd>
+                  </div>
+                  <div className="flex items-center justify-between gap-4 py-2.5">
+                    <dt className="text-sm text-[#6F6A61]">Phone</dt>
+                    <dd className="text-sm font-medium text-[#26231F]">{customer.phone}</dd>
+                  </div>
+                  {customer.email && (
+                    <div className="flex items-center justify-between gap-4 py-2.5">
+                      <dt className="text-sm text-[#6F6A61]">Email</dt>
+                      <dd className="truncate text-sm font-medium text-[#26231F]">
+                        {customer.email}
+                      </dd>
+                    </div>
+                  )}
+                </dl>
+              </section>
+
+              <BirthdayRewardsForm
+                key={`${customer.id}:${customer.dateOfBirth ?? "none"}:${customer.birthdayOffersEnabled}`}
+                customer={customer}
+              />
+            </div>
+
+{/* Right column: shortcuts */}
+            <aside className="min-w-0">
+              <section
+                className="rounded-2xl border border-[#DED6C8] bg-[#FFFDF8] p-4"
+                aria-labelledby="account-shortcuts-heading"
+              >
+                <h2
+                  id="account-shortcuts-heading"
+                  className="px-2.5 pb-1 font-serif-luxury text-base font-bold text-[#26231F]"
+                >
+                  Your Elite Library
+                </h2>
+                <nav className="flex flex-col pt-1" aria-label="Account shortcuts">
+                  <ShortcutItem href="/orders" label="My Orders" icon={ShoppingBag} />
+                  <ShortcutItem
+                    href="/wishlist"
+                    label="My Wishlist"
+                    icon={Heart}
+                    count={wishlistIds.length}
+                  />
+                  <ShortcutItem href="/coupons" label="My Coupons" icon={Gift} />
+                  <ShortcutItem href="/notifications" label="Notifications" icon={Bell} />
+                  <ShortcutItem href="/cart" label="My Cart" icon={Package} count={cartCount} />
+                </nav>
+
+                <div className="mt-2 border-t border-[#DED6C8] pt-2">
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="flex w-full items-center gap-3 rounded-xl px-2.5 py-2 text-sm font-medium text-[#8C2D19] transition-colors hover:bg-[#FFF4F1] hover:text-[#681F12] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B58A3A]"
+                  >
+                    <LogOut className="h-4 w-4" aria-hidden="true" />
+                    Sign Out
+                  </button>
+                </div>
+              </section>
+            </aside>
           </div>
         </div>
       </main>

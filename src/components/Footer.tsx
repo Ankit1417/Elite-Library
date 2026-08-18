@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookOpen, Mail, Phone, ShieldCheck } from "lucide-react";
+import { Mail, Phone, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 
 export default function Footer() {

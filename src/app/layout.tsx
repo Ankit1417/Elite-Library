@@ -3,6 +3,7 @@ import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/lib/cartContext";
 import { AuthProvider } from "@/lib/authContext";
+import { WishlistProvider } from "@/lib/wishlistContext";
 import CartDrawer from "@/components/CartDrawer";
 
 const playfair = Playfair_Display({
@@ -43,10 +44,12 @@ export default function RootLayout({
     <html lang="en" className={`${playfair.variable} ${jakarta.variable}`}>
       <body className="antialiased bg-[#F8F5EF] text-[#26231F] selection:bg-[#B58A3A]/20 selection:text-[#4A3628]">
         <AuthProvider>
-          <CartProvider>
-            {children}
-            <CartDrawer />
-          </CartProvider>
+          <WishlistProvider>
+            <CartProvider>
+              {children}
+              <CartDrawer />
+            </CartProvider>
+          </WishlistProvider>
         </AuthProvider>
       </body>
     </html>

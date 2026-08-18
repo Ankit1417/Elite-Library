@@ -3,24 +3,26 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { fetchApi } from "@/lib/api";
+import { getCategories } from "@/lib/categories";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
-import AnnouncementBar from "@/components/AnnouncementBar";
 import TrustFeatures from "@/components/TrustFeatures";
-import FeaturedCollections from "@/components/FeaturedCollections";
+import CategorySection from "@/components/CategorySection";
+import { CategoryItem } from "@/components/CategorySection";
 import BookGrid from "@/components/BookGrid";
 import Toast from "@/components/Toast";
 import { BookCardProps } from "@/components/BookCard";
-import { ArrowRight, Sparkles, Star, TrendingUp } from "lucide-react";
-
-interface CategoryItem {
-  _id: string;
-  name: string;
-  slug: string;
-  image?: string;
-  bookCount?: number;
-}
+import {
+  ArrowRight,
+  BookOpen,
+  HeadsetIcon,
+  Package,
+  ShieldCheck,
+  Star,
+  Tag,
+  Truck,
+} from "lucide-react";
 
 interface BookData {
   _id: string;
@@ -35,6 +37,8 @@ interface BookData {
   category?: { name: string };
   isFeatured?: boolean;
   isActive?: boolean;
+  averageRating?: number;
+  reviewCount?: number;
 }
 
 function mapBookData(books: BookData[]): BookCardProps[] {
@@ -49,8 +53,157 @@ function mapBookData(books: BookData[]): BookCardProps[] {
     finalPrice: b.finalPrice,
     stockQuantity: b.stockQuantity,
     categoryName: b.category?.name,
+    averageRating: b.averageRating,
+    reviewCount: b.reviewCount,
   }));
 }
+
+// ─── Section Header Component ──────────────────────────────────────────────────
+
+function SectionHeader({
+  eyebrow,
+  title,
+  viewAllHref,
+  viewAllLabel = "View All",
+}: {
+  eyebrow?: string;
+  title: string;
+  viewAllHref?: string;
+  viewAllLabel?: string;
+}) {
+  return (
+    <div className="flex items-end justify-between mb-7">
+      <div>
+        {eyebrow && (
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#B58A3A] mb-1.5">
+            {eyebrow}
+          </p>
+        )}
+        <h2 className="text-2xl sm:text-3xl font-bold text-[#111] leading-tight">
+          {title}
+        </h2>
+      </div>
+      {viewAllHref && (
+        <Link
+          href={viewAllHref}
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-neutral-500 hover:text-[#111] transition-colors group flex-shrink-0"
+        >
+          <span>{viewAllLabel}</span>
+          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+        </Link>
+      )}
+    </div>
+  );
+}
+
+// ─── Promo Banner ──────────────────────────────────────────────────────────────
+
+function PromoBanner() {
+  return (
+    <section className="py-12 bg-white border-b border-neutral-100">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative overflow-hidden rounded-2xl bg-[#111] px-8 sm:px-12 py-10 sm:py-12 flex flex-col sm:flex-row items-center justify-between gap-6 border border-[#B58A3A]/20">
+          {/* Gold glow */}
+          <div
+            className="absolute right-0 top-0 w-64 h-64 rounded-full bg-[#B58A3A]/10 blur-3xl pointer-events-none"
+            aria-hidden="true"
+          />
+
+          <div className="relative z-10 max-w-lg text-center sm:text-left">
+            <span className="inline-block text-[10px] font-bold uppercase tracking-[0.2em] text-[#B58A3A] mb-3 px-3 py-1 rounded-full border border-[#B58A3A]/30">
+              Limited Time
+            </span>
+            <h3 className="text-2xl sm:text-3xl font-bold text-white leading-snug">
+              Special Discounts on <span className="text-[#B58A3A]">Select Editions</span>
+            </h3>
+            <p className="text-neutral-400 text-sm mt-3 leading-relaxed">
+              Handpicked titles at reduced prices. Free delivery on all standard orders.
+            </p>
+          </div>
+
+          <Link
+            href="/books?sort=discount"
+            className="relative z-10 inline-flex items-center gap-2 px-7 py-3.5 bg-[#B58A3A] text-white font-bold text-sm rounded-xl hover:bg-[#9E7730] transition-colors shadow-lg flex-shrink-0 group"
+          >
+            <Tag className="w-4 h-4" />
+            <span>Shop Deals</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Why Shop Section ──────────────────────────────────────────────────────────
+
+function WhyShopSection() {
+  const reasons = [
+    {
+      icon: ShieldCheck,
+      title: "100% Authentic Books",
+      desc: "Every title is sourced from verified publishers and carefully inspected.",
+    },
+    {
+      icon: Truck,
+      title: "Nationwide Delivery",
+      desc: "Fast, reliable delivery to your doorstep across Nepal.",
+    },
+    {
+      icon: Package,
+      title: "Premium Packaging",
+      desc: "Books are packed safely to ensure perfect condition on arrival.",
+    },
+    {
+      icon: HeadsetIcon,
+      title: "Dedicated Support",
+      desc: "Our team is ready to assist with orders, returns and recommendations.",
+    },
+    {
+      icon: Star,
+      title: "Curated Selection",
+      desc: "Every book on Elite Library is handpicked for quality and value.",
+    },
+    {
+      icon: BookOpen,
+      title: "New Arrivals Weekly",
+      desc: "Fresh titles added every week across all popular genres.",
+    },
+  ];
+
+  return (
+    <section className="py-14 bg-neutral-50 border-b border-neutral-100">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-10">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#B58A3A] mb-1.5">
+            Why Choose Us
+          </p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-[#111]">
+            Why Shop With Elite Library
+          </h2>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
+          {reasons.map(({ icon: Icon, title, desc }) => (
+            <div
+              key={title}
+              className="flex flex-col items-start gap-3 p-5 bg-white rounded-xl border border-neutral-100 shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0">
+                <Icon className="w-5 h-5 text-[#B58A3A]" />
+              </div>
+              <div>
+                <p className="text-sm font-bold text-[#111] leading-tight">{title}</p>
+                <p className="text-xs text-neutral-400 mt-1.5 leading-relaxed">{desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Page ──────────────────────────────────────────────────────────────────────
 
 export default function HomePage() {
   const [categories, setCategories] = useState<CategoryItem[]>([]);
@@ -64,40 +217,29 @@ export default function HomePage() {
     async function loadHomeData() {
       try {
         setIsLoading(true);
-        // Load categories
-        const catRes = await fetchApi<CategoryItem[]>("/categories");
-        if (catRes.success) setCategories(catRes.data);
+        const [catSettled, featSettled, newSettled, bestSettled, discSettled] =
+          await Promise.allSettled([
+            getCategories(),
+            fetchApi<{ books: BookData[] }>("/books?isFeatured=true&limit=5"),
+            fetchApi<{ books: BookData[] }>("/books?isNewArrival=true&limit=5"),
+            fetchApi<{ books: BookData[] }>("/books?isBestSeller=true&limit=5"),
+            fetchApi<{ books: BookData[] }>("/books?hasDiscount=true&limit=5"),
+          ]);
 
-        // Load Featured books
-        const featRes = await fetchApi<{ books: BookData[] }>(
-          "/books?isFeatured=true&limit=4"
-        );
-        if (featRes.success) {
-          setFeaturedBooks(mapBookData(featRes.data.books));
+        if (catSettled.status === "fulfilled" && Array.isArray(catSettled.value)) {
+          setCategories(catSettled.value);
         }
-
-        // Load New Arrivals
-        const newRes = await fetchApi<{ books: BookData[] }>(
-          "/books?isNewArrival=true&limit=4"
-        );
-        if (newRes.success) {
-          setNewArrivals(mapBookData(newRes.data.books));
+        if (featSettled.status === "fulfilled" && featSettled.value.success) {
+          setFeaturedBooks(mapBookData(featSettled.value.data.books));
         }
-
-        // Load Best Sellers
-        const bestRes = await fetchApi<{ books: BookData[] }>(
-          "/books?isBestSeller=true&limit=4"
-        );
-        if (bestRes.success) {
-          setBestSellers(mapBookData(bestRes.data.books));
+        if (newSettled.status === "fulfilled" && newSettled.value.success) {
+          setNewArrivals(mapBookData(newSettled.value.data.books));
         }
-
-        // Load Discounted
-        const discRes = await fetchApi<{ books: BookData[] }>(
-          "/books?hasDiscount=true&limit=4"
-        );
-        if (discRes.success) {
-          setDiscountedBooks(mapBookData(discRes.data.books));
+        if (bestSettled.status === "fulfilled" && bestSettled.value.success) {
+          setBestSellers(mapBookData(bestSettled.value.data.books));
+        }
+        if (discSettled.status === "fulfilled" && discSettled.value.success) {
+          setDiscountedBooks(mapBookData(discSettled.value.data.books));
         }
       } catch (err) {
         console.error("Error loading home page data:", err);
@@ -106,136 +248,77 @@ export default function HomePage() {
       }
     }
 
-    loadHomeData();
+    void loadHomeData();
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F7F3EF] text-[#211C18]">
-      <AnnouncementBar />
+    <div className="min-h-screen flex flex-col bg-white text-[#111]">
       <Navbar />
       <HeroSection />
       <TrustFeatures />
-      <FeaturedCollections categories={categories} />
 
-      {/* Featured Books (White section) */}
-      <section className="py-14 bg-[#FFFDF8] border-b border-[#DED6C8]">
-        <div className="max-w-[1400px] mx-auto px-6">
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-2.5">
-              <Star className="w-5 h-5 text-[#B58A3A] fill-[#B58A3A]" />
-              <h2 className="font-serif-luxury text-2xl sm:text-3xl font-bold text-[#211C18]">
-                Featured Highlights
-              </h2>
-            </div>
-            <Link
-              href="/books?isFeatured=true"
-              className="text-xs font-semibold text-[#2B1F16] hover:text-[#B58A3A] flex items-center gap-1 group transition-colors"
-            >
-              <span>Explore All</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </div>
+      {/* Shop by Category */}
+      <CategorySection categories={categories} />
+
+      {/* Featured Books */}
+      <section className="py-14 bg-white border-b border-neutral-100">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader
+            eyebrow="Hand-picked"
+            title="Featured Books"
+            viewAllHref="/books?isFeatured=true"
+            viewAllLabel="View All Featured"
+          />
           <BookGrid books={featuredBooks} isLoading={isLoading} />
         </div>
       </section>
 
-      {/* New Arrivals (Ivory section) */}
-      <section className="py-14 bg-[#F7F3EF] border-b border-[#DED6C8]">
-        <div className="max-w-[1400px] mx-auto px-6">
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-2.5">
-              <Sparkles className="w-5 h-5 text-[#B58A3A]" />
-              <h2 className="font-serif-luxury text-2xl sm:text-3xl font-bold text-[#211C18]">
-                New Arrivals
-              </h2>
-            </div>
-            <Link
-              href="/books?isNewArrival=true"
-              className="text-xs font-semibold text-[#2B1F16] hover:text-[#B58A3A] flex items-center gap-1 group transition-colors"
-            >
-              <span>Explore All</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </div>
+      {/* New Arrivals */}
+      <section className="py-14 bg-neutral-50 border-b border-neutral-100">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader
+            eyebrow="Just Added"
+            title="New Arrivals"
+            viewAllHref="/books?isNewArrival=true"
+            viewAllLabel="View All"
+          />
           <BookGrid books={newArrivals} isLoading={isLoading} />
         </div>
       </section>
 
-      {/* Promotional Banner (Beige section with deep brown card) */}
-      <section className="py-14 bg-[#EDE7DF] border-b border-[#DED6C8]">
-        <div className="max-w-[1400px] mx-auto px-6">
-          <div className="bg-[#2B1F16] rounded-3xl p-8 sm:p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 border border-[#B58A3A]/30 shadow-lg">
-            <div className="max-w-xl z-10">
-              <span className="text-xs font-bold uppercase tracking-widest text-[#B58A3A] block mb-2">
-                Exclusive Bibliophile Offer
-              </span>
-              <h3 className="font-serif-luxury text-3xl sm:text-4xl font-bold text-[#F7F3EF] leading-tight">
-                Enhance Your Personal Library Today
-              </h3>
-              <p className="text-[#DED6C8] text-sm mt-3 font-light leading-relaxed">
-                Enjoy special reduced pricing on selected leather-bound classics and rare intellectual monographs. Complimentary safe delivery on all standard orders.
-              </p>
-              <div className="mt-6">
-                <Link
-                  href="/books?sort=discount"
-                  className="px-6 py-3 bg-[#B58A3A] text-[#F7F3EF] font-bold text-sm rounded-xl hover:bg-[#9E7730] transition-all inline-flex items-center gap-2 shadow-md"
-                >
-                  <span>Shop Discounted Editions</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Promo Banner */}
+      <PromoBanner />
 
-      {/* Best Sellers (White section) */}
-      <section className="py-14 bg-[#FFFDF8] border-b border-[#DED6C8]">
-        <div className="max-w-[1400px] mx-auto px-6">
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-2.5">
-              <TrendingUp className="w-5 h-5 text-[#B58A3A]" />
-              <h2 className="font-serif-luxury text-2xl sm:text-3xl font-bold text-[#211C18]">
-                Best Sellers
-              </h2>
-            </div>
-            <Link
-              href="/books?isBestSeller=true"
-              className="text-xs font-semibold text-[#2B1F16] hover:text-[#B58A3A] flex items-center gap-1 group transition-colors"
-            >
-              <span>Explore All</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </div>
+      {/* Best Sellers */}
+      <section className="py-14 bg-white border-b border-neutral-100">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader
+            eyebrow="Most Popular"
+            title="Best Sellers"
+            viewAllHref="/books?isBestSeller=true"
+            viewAllLabel="View All"
+          />
           <BookGrid books={bestSellers} isLoading={isLoading} />
         </div>
       </section>
 
-      {/* Discounted Books (Ivory section) */}
+      {/* Curated Deals */}
       {discountedBooks.length > 0 && (
-        <section className="py-14 bg-[#F7F3EF]">
-          <div className="max-w-[1400px] mx-auto px-6">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <span className="text-xs font-semibold text-[#B58A3A] uppercase tracking-widest block">
-                  Limited Savings
-                </span>
-                <h2 className="font-serif-luxury text-2xl sm:text-3xl font-bold text-[#211C18] mt-0.5">
-                  Special Discounts
-                </h2>
-              </div>
-              <Link
-                href="/books?sort=discount"
-                className="text-xs font-semibold text-[#2B1F16] hover:text-[#B58A3A] flex items-center gap-1 group transition-colors"
-              >
-                <span>Explore All</span>
-                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
+        <section className="py-14 bg-neutral-50 border-b border-neutral-100">
+          <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+            <SectionHeader
+              eyebrow="Limited Savings"
+              title="Curated Deals"
+              viewAllHref="/books?sort=discount"
+              viewAllLabel="View All Deals"
+            />
             <BookGrid books={discountedBooks} isLoading={isLoading} />
           </div>
         </section>
       )}
+
+      {/* Why Shop With Us */}
+      <WhyShopSection />
 
       <Toast />
       <Footer />
