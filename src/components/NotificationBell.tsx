@@ -108,7 +108,7 @@ function announceNotificationChange() {
 
 export default function NotificationBell() {
   const router = useRouter();
-  const { isAuthenticated, customer } = useAuth();
+  const { isAuthenticated, customer, isLoading: authLoading } = useAuth();
   const containerRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -117,7 +117,7 @@ export default function NotificationBell() {
   const [error, setError] = useState<string | null>(null);
 
   const loadUnreadCount = useCallback(async () => {
-    if (!isAuthenticated) return;
+    if (authLoading || !isAuthenticated || !customer) return;
 
     try {
       const response = await fetchApi<{ count: number }>("/notifications/unread-count");
@@ -125,10 +125,10 @@ export default function NotificationBell() {
     } catch {
       // Keep the last known count during a transient refresh failure.
     }
-  }, [isAuthenticated]);
+  }, [authLoading, isAuthenticated, customer]);
 
   const loadRecentNotifications = useCallback(async () => {
-    if (!isAuthenticated) return;
+    if (authLoading || !isAuthenticated || !customer) return;
 
     setIsLoading(true);
     setError(null);
@@ -146,10 +146,15 @@ export default function NotificationBell() {
     } finally {
       setIsLoading(false);
     }
-  }, [isAuthenticated]);
+  }, [authLoading, isAuthenticated, customer]);
 
   useEffect(() => {
-    if (!isAuthenticated) return;
+    if (authLoading || !isAuthenticated || !customer) {
+      const timer = setTimeout(() => {
+        setUnreadCount(0);
+      }, 0);
+      return () => clearTimeout(timer);
+    }
 
     const initialLoadId = window.setTimeout(() => void loadUnreadCount(), 0);
     const intervalId = window.setInterval(loadUnreadCount, 60_000);
@@ -163,7 +168,7 @@ export default function NotificationBell() {
       window.removeEventListener("focus", refresh);
       window.removeEventListener(NOTIFICATIONS_CHANGED_EVENT, refresh);
     };
-  }, [isAuthenticated, customer?.id, loadUnreadCount]);
+  }, [authLoading, isAuthenticated, customer, loadUnreadCount]);
 
   useEffect(() => {
     if (!isOpen) return;

@@ -33,13 +33,13 @@ const WishlistContext = createContext<WishlistContextType | undefined>(undefined
 
 export function WishlistProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
   const [wishlistBooks, setWishlistBooks] = useState<WishlistBook[]>([]);
   const [wishlistIds, setWishlistIds] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchWishlist = useCallback(async () => {
-    if (!isAuthenticated) {
+    if (authLoading || !isAuthenticated) {
       setWishlistBooks([]);
       setWishlistIds([]);
       return;
@@ -51,23 +51,30 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
         setWishlistBooks(res.data.wishlist);
         setWishlistIds(res.data.wishlist.map((b) => b._id));
       }
-    } catch (err) {
-      console.error("Failed to load wishlist:", err);
+    } catch {
+      // Gracefully handle unauthenticated or network failures
     } finally {
       setIsLoading(false);
     }
-  }, [isAuthenticated]);
+  }, [authLoading, isAuthenticated]);
 
   // Expose as refreshWishlist for external callers
   const refreshWishlist = fetchWishlist;
 
   useEffect(() => {
-    // This calls setState asynchronously after an API response — not synchronously.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    void fetchWishlist();
-    // fetchWishlist is memoized and stable; we intentionally depend on isAuthenticated
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated]);
+    if (!authLoading && isAuthenticated) {
+      const timer = setTimeout(() => {
+        void fetchWishlist();
+      }, 0);
+      return () => clearTimeout(timer);
+    } else if (!authLoading && !isAuthenticated) {
+      const timer = setTimeout(() => {
+        setWishlistBooks([]);
+        setWishlistIds([]);
+      }, 0);
+      return () => clearTimeout(timer);
+    }
+  }, [authLoading, isAuthenticated, fetchWishlist]);
 
   const isWishlisted = useCallback(
     (bookId: string) => {

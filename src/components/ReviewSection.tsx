@@ -295,7 +295,10 @@ export default function ReviewSection({
   );
 
   const loadEligibility = useCallback(async () => {
-    if (!isAuthenticated) return;
+    if (authLoading || !isAuthenticated) {
+      setEligibility(null);
+      return;
+    }
     try {
       setEligibilityLoading(true);
       const data = await getMyReviewStatus(bookId);
@@ -305,7 +308,7 @@ export default function ReviewSection({
     } finally {
       setEligibilityLoading(false);
     }
-  }, [bookId, isAuthenticated]);
+  }, [bookId, authLoading, isAuthenticated]);
 
   useEffect(() => {
     const id = window.setTimeout(() => void loadSummary(), 0);
@@ -318,9 +321,16 @@ export default function ReviewSection({
   }, [sort, loadReviews]);
 
   useEffect(() => {
-    const id = window.setTimeout(() => void loadEligibility(), 0);
-    return () => window.clearTimeout(id);
-  }, [loadEligibility]);
+    if (!authLoading && isAuthenticated) {
+      const id = window.setTimeout(() => void loadEligibility(), 0);
+      return () => window.clearTimeout(id);
+    } else if (!authLoading && !isAuthenticated) {
+      const timer = window.setTimeout(() => {
+        setEligibility(null);
+      }, 0);
+      return () => window.clearTimeout(timer);
+    }
+  }, [authLoading, isAuthenticated, loadEligibility]);
 
   const openCreateForm = () => {
     setEditingReview(null);
