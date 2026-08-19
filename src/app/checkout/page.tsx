@@ -286,22 +286,53 @@ export default function CheckoutPage() {
         ...(activeCoupon ? { couponCode: activeCoupon.coupon.code } : {}),
       };
 
-      const res = await fetchApi<{ orderNumber: string }>("/orders", {
+      const res = await fetchApi<{ _id: string; orderNumber: string }>("/orders", {
         method: "POST",
         body: JSON.stringify(payload),
       });
 
-      if (res.success && res.data?.orderNumber) {
+      if (!res.success || !res.data?._id) {
+        setErrorMessage(res.message || "Failed to place order");
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (selectedPayment === "COD") {
         clearCart();
         showToast("Order placed successfully!");
         router.push(`/order-success?orderNumber=${res.data.orderNumber}`);
-      } else {
-        setErrorMessage(res.message || "Failed to place order");
+      } else if (selectedPayment === "ESEWA") {
+        showToast("Order initialized. Redirecting to eSewa...");
+        const initiateRes = await fetchApi<{
+          paymentUrl: string;
+          fields: Record<string, string>;
+        }>("/payments/esewa/initiate", {
+          method: "POST",
+          body: JSON.stringify({ orderId: res.data._id }),
+        });
+
+        if (initiateRes.success && initiateRes.data?.paymentUrl && initiateRes.data?.fields) {
+          clearCart();
+          const form = document.createElement("form");
+          form.method = "POST";
+          form.action = initiateRes.data.paymentUrl;
+          Object.entries(initiateRes.data.fields).forEach(([key, val]) => {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = key;
+            input.value = String(val);
+            form.appendChild(input);
+          });
+          document.body.appendChild(form);
+          form.submit();
+        } else {
+          setErrorMessage(initiateRes.message || "Failed to initiate eSewa payment gateway");
+          setIsSubmitting(false);
+        }
       }
     } catch (err: unknown) {
       if (err instanceof Error) setErrorMessage(err.message);
       else setErrorMessage("Order submission failed");
-    } finally {
       setIsSubmitting(false);
     }
   };
@@ -722,10 +753,12 @@ export default function CheckoutPage() {
                   : couponNeedsRefresh
                   ? "Reapply Coupon to Continue"
                   : isSubmitting
-                  ? "Processing Order..."
+                  ? selectedPayment === "ESEWA"
+                    ? "Redirecting to eSewa..."
+                    : "Processing Order..."
                   : selectedPayment === "COD"
                     ? "Confirm & Place COD Order"
-                    : "Continue to eSewa"}
+                    : "Pay with eSewa"}
               </button>
             </div>
           </div>
