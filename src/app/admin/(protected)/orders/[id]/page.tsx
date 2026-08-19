@@ -112,8 +112,8 @@ export default function AdminOrderDetailPage({
 
   if (isLoading) {
     return (
-      <div className="py-20 text-center text-slate-400">
-        <div className="w-8 h-8 border-3 border-[#d4af37] border-t-transparent rounded-full animate-spin mx-auto" />
+      <div className="py-20 text-center">
+        <div className="w-8 h-8 border-3 border-[#B58A3A] border-t-transparent rounded-full animate-spin mx-auto" />
       </div>
     );
   }
@@ -131,7 +131,7 @@ export default function AdminOrderDetailPage({
     <div className="space-y-6 max-w-4xl mx-auto">
       <Link
         href="/admin/orders"
-        className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-amber-200 transition-colors mb-2"
+        className="inline-flex items-center gap-2 text-xs font-semibold text-[#716A61] hover:text-[#B58A3A] transition-colors mb-2"
       >
         <ArrowLeft className="w-4 h-4" />
         <span>Back to Customer Orders List</span>
@@ -139,40 +139,40 @@ export default function AdminOrderDetailPage({
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <span className="text-xs uppercase tracking-widest text-[#d4af37] font-semibold">
+          <span className="text-xs uppercase tracking-widest text-[#B58A3A] font-semibold">
             Order Record
           </span>
-          <h1 className="font-mono text-3xl font-bold text-amber-200 mt-1">
+          <h1 className="font-mono text-3xl font-bold text-[#27231F] mt-1">
             {order.orderNumber}
           </h1>
-          <span className="text-xs text-slate-400 block mt-0.5">
+          <span className="text-xs text-[#716A61] block mt-0.5">
             Placed on {new Date(order.createdAt).toLocaleString()}
           </span>
         </div>
       </div>
 
       {message && (
-        <div className="p-4 rounded-xl bg-emerald-950/80 border border-emerald-800 text-emerald-300 text-xs font-semibold">
+        <div className="p-4 rounded-xl bg-[#E8F5E9] border border-[#2E7D32]/30 text-[#2E7D32] text-xs font-semibold">
           {message}
         </div>
       )}
 
       {/* Status Management Panel */}
-      <div className="glass-card-accent p-6 rounded-2xl border border-slate-800 space-y-4">
-        <h3 className="font-serif-luxury font-bold text-base text-slate-100 border-b border-slate-800 pb-3 flex items-center gap-2">
-          <ShieldAlert className="w-5 h-5 text-[#d4af37]" />
-          <span>Fulfillment & Payment Control</span>
+      <div className="bg-[#FFFDF9] p-6 rounded-2xl border border-[#DED6CA] space-y-4">
+        <h3 className="font-serif-luxury font-bold text-base text-[#27231F] border-b border-[#DED6CA] pb-3 flex items-center gap-2">
+          <ShieldAlert className="w-5 h-5 text-[#B58A3A]" />
+          <span>Fulfillment &amp; Payment Control</span>
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-1">
+            <label className="text-xs font-semibold text-[#27231F] block mb-1">
               Order Fulfillment Status
             </label>
             <select
               value={orderStatus}
               onChange={(e) => setOrderStatus(e.target.value)}
-              className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-[#d4af37]"
+              className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl px-3.5 py-2.5 text-xs text-[#F5F0E8] focus:outline-none focus:border-[#B58A3A]"
             >
               <option value="PENDING">PENDING</option>
               <option value="CONFIRMED">CONFIRMED</option>
@@ -184,13 +184,13 @@ export default function AdminOrderDetailPage({
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-1">
+            <label className="text-xs font-semibold text-[#27231F] block mb-1">
               Payment Status
             </label>
             <select
               value={paymentStatus}
               onChange={(e) => setPaymentStatus(e.target.value)}
-              className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-[#d4af37]"
+              className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl px-3.5 py-2.5 text-xs text-[#F5F0E8] focus:outline-none focus:border-[#B58A3A]"
             >
               <option value="PENDING">PENDING</option>
               <option value="PAID">PAID</option>
@@ -202,7 +202,7 @@ export default function AdminOrderDetailPage({
 
         <button
           onClick={handleUpdateStatus}
-          className="px-6 py-2.5 bg-[#d4af37] text-slate-950 font-bold text-xs uppercase tracking-wider rounded-xl hover:brightness-110 transition-all shadow-md"
+          className="px-6 py-2.5 bg-[#B58A3A] text-white font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-[#9A7330] transition-all shadow-md"
         >
           Update Statuses
         </button>
@@ -210,46 +210,46 @@ export default function AdminOrderDetailPage({
 
       {/* Customer Info & Shipping */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-xs">
-        <div className="glass-card p-5 rounded-2xl border border-slate-800 space-y-2">
-          <div className="flex items-center gap-2 text-[#d4af37] font-semibold border-b border-slate-800 pb-2">
+        <div className="bg-[#FFFDF9] p-5 rounded-2xl border border-[#DED6CA] space-y-2">
+          <div className="flex items-center gap-2 text-[#B58A3A] font-semibold border-b border-[#DED6CA] pb-2">
             <MapPin className="w-4 h-4" />
             <span>Customer Shipping Details</span>
           </div>
-          <p className="font-bold text-slate-100 text-sm">{order.customer.name}</p>
-          <p className="text-slate-300">Phone: {order.customer.phone}</p>
+          <p className="font-bold text-[#27231F] text-sm">{order.customer.name}</p>
+          <p className="text-[#4A3628]">Phone: {order.customer.phone}</p>
           {order.customer.email && (
-            <p className="text-slate-400">Email: {order.customer.email}</p>
+            <p className="text-[#716A61]">Email: {order.customer.email}</p>
           )}
-          <p className="text-slate-300 mt-2 font-medium">{order.customer.area}</p>
-          <p className="text-slate-400">
+          <p className="text-[#4A3628] mt-2 font-medium">{order.customer.area}</p>
+          <p className="text-[#716A61]">
             {order.customer.city}, {order.customer.province}
           </p>
           {order.customer.landmark && (
-            <p className="text-slate-500 italic">Landmark: {order.customer.landmark}</p>
+            <p className="text-[#716A61] italic">Landmark: {order.customer.landmark}</p>
           )}
         </div>
 
-        <div className="glass-card p-5 rounded-2xl border border-slate-800 space-y-2">
-          <div className="flex items-center gap-2 text-[#d4af37] font-semibold border-b border-slate-800 pb-2">
+        <div className="bg-[#FFFDF9] p-5 rounded-2xl border border-[#DED6CA] space-y-2">
+          <div className="flex items-center gap-2 text-[#B58A3A] font-semibold border-b border-[#DED6CA] pb-2">
             <Truck className="w-4 h-4" />
             <span>Order Instructions</span>
           </div>
-          <p className="text-slate-300">
-            Payment Method: <span className="font-bold text-slate-100">{order.paymentMethod}</span>
+          <p className="text-[#4A3628]">
+            Payment Method: <span className="font-bold text-[#27231F]">{order.paymentMethod}</span>
           </p>
           {order.customer.deliveryNotes ? (
-            <p className="text-amber-200 mt-2 bg-slate-900 p-3 rounded-xl border border-slate-800">
+            <p className="text-[#27231F] mt-2 bg-[#F6F2EA] p-3 rounded-xl border border-[#DED6CA]">
               Customer Note: &quot;{order.customer.deliveryNotes}&quot;
             </p>
           ) : (
-            <p className="text-slate-500 italic">No delivery notes provided by customer.</p>
+            <p className="text-[#716A61] italic">No delivery notes provided by customer.</p>
           )}
         </div>
       </div>
 
       {/* Ordered Items Breakdown */}
-      <div className="glass-card p-6 rounded-2xl border border-slate-800 space-y-4">
-        <h3 className="font-serif-luxury font-bold text-base text-slate-100 border-b border-slate-800 pb-3">
+      <div className="bg-[#FFFDF9] p-6 rounded-2xl border border-[#DED6CA] space-y-4">
+        <h3 className="font-serif-luxury font-bold text-base text-[#27231F] border-b border-[#DED6CA] pb-3">
           Ordered Books ({order.items.length})
         </h3>
 
@@ -257,10 +257,10 @@ export default function AdminOrderDetailPage({
           {order.items.map((item, idx) => (
             <div
               key={idx}
-              className="flex items-center justify-between gap-3 p-3 bg-slate-900/60 rounded-xl border border-slate-800"
+              className="flex items-center justify-between gap-3 p-3 bg-[#1C1917] rounded-xl border border-[#4A3628]"
             >
               <div className="flex items-center gap-3">
-                <div className="relative aspect-[3/4] w-12 rounded overflow-hidden bg-slate-950 shrink-0">
+                <div className="relative aspect-[3/4] w-12 rounded overflow-hidden bg-[#27231F] shrink-0">
                   <Image
                     src={item.coverImage}
                     alt={item.title}
@@ -270,37 +270,37 @@ export default function AdminOrderDetailPage({
                   />
                 </div>
                 <div>
-                  <h5 className="font-serif-luxury text-xs font-semibold text-slate-200">
+                  <h5 className="font-serif-luxury text-xs font-semibold text-[#F5F0E8]">
                     {item.title}
                   </h5>
-                  <span className="text-[11px] text-slate-400">
+                  <span className="text-[11px] text-[#A39A8D]">
                     Qty: {item.quantity} × Rs. {item.finalPrice.toLocaleString()}
                   </span>
                 </div>
               </div>
 
-              <span className="text-xs font-bold text-amber-200">
+              <span className="text-xs font-bold text-[#B58A3A]">
                 Rs. {(item.finalPrice * item.quantity).toLocaleString()}
               </span>
             </div>
           ))}
         </div>
 
-        <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 space-y-2 text-xs text-slate-300">
+        <div className="p-4 bg-[#1C1917] rounded-xl border border-[#4A3628] space-y-2 text-xs text-[#D4C5A9]">
           <div className="flex justify-between">
             <span>Subtotal</span>
-            <span className="font-semibold text-slate-100">
+            <span className="font-semibold text-[#F5F0E8]">
               Rs. {order.subtotal.toLocaleString()}
             </span>
           </div>
           {itemDiscountAmount > 0 && (
-            <div className="flex justify-between text-emerald-400">
+            <div className="flex justify-between text-[#6DB56D]">
               <span>Catalog Savings</span>
               <span>- Rs. {itemDiscountAmount.toLocaleString()}</span>
             </div>
           )}
           {(couponDiscountAmount > 0 || order.couponCode) && (
-            <div className="flex justify-between gap-3 text-emerald-400">
+            <div className="flex justify-between gap-3 text-[#6DB56D]">
               <span className="min-w-0 truncate" title={order.couponCode}>
                 Coupon{order.couponCode ? ` (${order.couponCode})` : ""}
               </span>
@@ -309,11 +309,11 @@ export default function AdminOrderDetailPage({
           )}
           <div className="flex justify-between">
             <span>Delivery Fee</span>
-            <span className="font-semibold text-slate-100">
+            <span className="font-semibold text-[#F5F0E8]">
               Rs. {order.deliveryFee.toLocaleString()}
             </span>
           </div>
-          <div className="flex justify-between text-base font-bold text-amber-200 pt-2 border-t border-slate-800">
+          <div className="flex justify-between text-base font-bold text-[#B58A3A] pt-2 border-t border-[#4A3628]">
             <span>Total Payable</span>
             <span>Rs. {order.totalAmount.toLocaleString()}</span>
           </div>
@@ -321,8 +321,8 @@ export default function AdminOrderDetailPage({
       </div>
 
       {/* Internal Admin Notes */}
-      <div className="glass-card p-6 rounded-2xl border border-slate-800 space-y-4">
-        <h3 className="font-serif-luxury font-bold text-base text-slate-100 border-b border-slate-800 pb-3">
+      <div className="bg-[#FFFDF9] p-6 rounded-2xl border border-[#DED6CA] space-y-4">
+        <h3 className="font-serif-luxury font-bold text-base text-[#27231F] border-b border-[#DED6CA] pb-3">
           Internal Admin Notes
         </h3>
 
@@ -331,13 +331,13 @@ export default function AdminOrderDetailPage({
           value={adminNotes}
           onChange={(e) => setAdminNotes(e.target.value)}
           placeholder="Private notes for staff (e.g. Courier tracking #, customer contact log)..."
-          className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-slate-100 focus:outline-none focus:border-[#d4af37]"
+          className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl p-3 text-xs text-[#F5F0E8] placeholder-[#6B6259] focus:outline-none focus:border-[#B58A3A]"
         />
 
         <button
           onClick={handleSaveNotes}
           disabled={isSavingNotes}
-          className="px-5 py-2.5 bg-slate-800 text-amber-200 font-bold text-xs rounded-xl hover:bg-slate-700 transition-colors inline-flex items-center gap-2"
+          className="px-5 py-2.5 bg-[#4A3628] text-[#B58A3A] font-bold text-xs rounded-xl hover:bg-[#352D27] transition-colors inline-flex items-center gap-2"
         >
           <Save className="w-4 h-4" />
           <span>{isSavingNotes ? "Saving..." : "Save Admin Notes"}</span>

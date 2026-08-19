@@ -100,7 +100,7 @@ function ReviewCard({
 
       <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[#6F6A61]">
         <span className="font-semibold text-[#4A3628]">
-          {review.customer?.name ?? "Verified Customer"}
+          {review.customer?.name ?? "Customer"}
         </span>
         {review.isVerifiedPurchase && (
           <span className="inline-flex items-center gap-1 rounded-full border border-[#2E7D32]/30 bg-[#E8F5E9] px-2 py-0.5 text-[10px] font-bold text-[#2E7D32]">
@@ -113,9 +113,11 @@ function ReviewCard({
         </span>
       </div>
 
-      <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-[#26231F]">
-        {review.comment}
-      </p>
+      {review.comment && review.comment.trim() && (
+        <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-[#26231F]">
+          {review.comment}
+        </p>
+      )}
     </article>
   );
 }
@@ -149,7 +151,7 @@ function ReviewAction({
     return (
       <div className="flex flex-col items-start gap-2">
         <p className="text-sm text-[#6F6A61]">
-          Sign in to share your thoughts about this book.
+          Sign in to share your rating or review with other readers.
         </p>
         <Link
           href={`/login?redirect=${encodeURIComponent(`/books/${bookSlug}`)}`}
@@ -197,16 +199,6 @@ function ReviewAction({
           </button>
         </div>
       </div>
-    );
-  }
-
-  if (!eligibility.eligible) {
-    return (
-      <p className="max-w-lg text-sm leading-6 text-[#6F6A61]">
-        Only verified customers who purchased this book through Elite Library
-        can leave a review. Your review will be available once your order is
-        completed.
-      </p>
     );
   }
 
@@ -345,7 +337,7 @@ export default function ReviewSection({
     setEditingReview(review);
     setFormRating(review.rating);
     setFormTitle(review.title ?? "");
-    setFormComment(review.comment);
+    setFormComment(review.comment ?? "");
     setFormError(null);
     setFormOpen(true);
   };
@@ -364,8 +356,8 @@ export default function ReviewSection({
       setFormError("Please select a rating.");
       return;
     }
-    if (formComment.trim().length < 10) {
-      setFormError("Review must contain at least 10 characters.");
+    if (formComment.trim().length > 2000) {
+      setFormError("Review must be 2000 characters or fewer.");
       return;
     }
 
@@ -373,8 +365,8 @@ export default function ReviewSection({
       setFormSubmitting(true);
       const input = {
         rating: formRating,
-        title: formTitle.trim(),
-        comment: formComment.trim(),
+        title: formTitle.trim() || undefined,
+        comment: formComment.trim() || undefined,
       };
       if (editingReview) {
         await updateReview(editingReview._id, input);
@@ -639,27 +631,22 @@ export default function ReviewSection({
                   placeholder="Catchy summary of your review"
                   className="w-full rounded-xl border border-[#DED6C8] bg-[#F8F5EF] px-3.5 py-2.5 text-sm text-[#26231F] placeholder-[#68615B] focus:border-[#B58A3A] focus:outline-none focus:ring-1 focus:ring-[#B58A3A]"
                 />
-              </div>
-
-              <div>
+              </div>              <div>
                 <label htmlFor="review-comment" className="mb-1.5 block text-xs font-semibold text-[#4A3628]">
-                  Your Review *
+                  Your Review{" "}
+                  <span className="font-normal text-[#6F6A61]">(optional)</span>
                 </label>
                 <textarea
                   id="review-comment"
                   value={formComment}
                   onChange={(e) => setFormComment(e.target.value)}
                   rows={4}
-                  minLength={10}
                   maxLength={2000}
                   placeholder="What did you like or dislike about this book?"
                   className="w-full resize-y rounded-xl border border-[#DED6C8] bg-[#F8F5EF] px-3.5 py-2.5 text-sm text-[#26231F] placeholder-[#68615B] focus:border-[#B58A3A] focus:outline-none focus:ring-1 focus:ring-[#B58A3A]"
                 />
                 <p className="mt-1 text-[11px] text-[#6F6A61]">
-                  {formComment.trim().length}/2000 characters{" "}
-                  {formComment.trim().length > 0 && formComment.trim().length < 10
-                    ? `— at least 10 required (${10 - formComment.trim().length} more)`
-                    : ""}
+                  {formComment.trim().length}/2000 characters
                 </p>
               </div>
 

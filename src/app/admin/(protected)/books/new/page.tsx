@@ -151,17 +151,17 @@ export default function NewBookPage() {
     <div className="space-y-6 max-w-4xl mx-auto">
       <Link
         href="/admin/books"
-        className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-amber-200 transition-colors mb-2"
+        className="inline-flex items-center gap-2 text-xs font-semibold text-[#716A61] hover:text-[#B58A3A] transition-colors mb-2"
       >
         <ArrowLeft className="w-4 h-4" />
         <span>Back to Books Inventory</span>
       </Link>
 
       <div>
-        <span className="text-xs uppercase tracking-widest text-[#d4af37] font-semibold">
+        <span className="text-xs uppercase tracking-widest text-[#B58A3A] font-semibold">
           Catalog Expansion
         </span>
-        <h1 className="font-serif-luxury text-3xl font-bold text-slate-100 mt-1">
+        <h1 className="font-serif-luxury text-3xl font-bold text-[#27231F] mt-1">
           Add New Book Title
         </h1>
       </div>
@@ -174,15 +174,15 @@ export default function NewBookPage() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Core Book Info */}
-        <div className="glass-card p-6 rounded-2xl border border-slate-800 space-y-4">
-          <h3 className="font-serif-luxury text-base font-bold text-slate-100 border-b border-slate-800 pb-3">
-            1. Title & Authorship
+        <div className="bg-[#FFFDF9] p-6 rounded-2xl border border-[#DED6CA] space-y-4">
+          <h3 className="font-serif-luxury text-base font-bold text-[#27231F] border-b border-[#DED6CA] pb-3">
+            1. Title &amp; Authorship
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
-                Book Title <span className="text-amber-400">*</span>
+              <label className="text-xs font-semibold text-[#27231F] block mb-1">
+                Book Title <span className="text-[#B58A3A]">*</span>
               </label>
               <input
                 type="text"
@@ -190,13 +190,13 @@ export default function NewBookPage() {
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 placeholder="e.g. The Picture of Dorian Gray"
                 required
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-[#d4af37]"
+                className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl px-3.5 py-2.5 text-xs text-[#F5F0E8] placeholder-[#6B6259] focus:outline-none focus:border-[#B58A3A]"
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
-                Author Name <span className="text-amber-400">*</span>
+              <label className="text-xs font-semibold text-[#27231F] block mb-1">
+                Author Name <span className="text-[#B58A3A]">*</span>
               </label>
               <input
                 type="text"
@@ -204,21 +204,21 @@ export default function NewBookPage() {
                 onChange={(e) => setFormData({ ...formData, author: e.target.value })}
                 placeholder="e.g. Oscar Wilde"
                 required
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-[#d4af37]"
+                className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl px-3.5 py-2.5 text-xs text-[#F5F0E8] placeholder-[#6B6259] focus:outline-none focus:border-[#B58A3A]"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
-                Category / Genre <span className="text-amber-400">*</span>
+              <label className="text-xs font-semibold text-[#27231F] block mb-1">
+                Category / Genre <span className="text-[#B58A3A]">*</span>
               </label>
               <select
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                 required
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-[#d4af37]"
+                className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl px-3.5 py-2.5 text-xs text-[#F5F0E8] focus:outline-none focus:border-[#B58A3A]"
               >
                 {categories.map((c) => (
                   <option key={c._id} value={c._id}>
@@ -229,7 +229,7 @@ export default function NewBookPage() {
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
+              <label className="text-xs font-semibold text-[#27231F] block mb-1">
                 Custom Slug (Optional)
               </label>
               <input
@@ -237,14 +237,14 @@ export default function NewBookPage() {
                 value={formData.slug}
                 onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                 placeholder="Auto-generated if left empty"
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-[#d4af37]"
+                className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl px-3.5 py-2.5 text-xs text-[#F5F0E8] placeholder-[#6B6259] focus:outline-none focus:border-[#B58A3A]"
               />
             </div>
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-1">
-              Description / Overview <span className="text-amber-400">*</span>
+            <label className="text-xs font-semibold text-[#27231F] block mb-1">
+              Description / Overview <span className="text-[#B58A3A]">*</span>
             </label>
             <textarea
               rows={4}
@@ -252,21 +252,21 @@ export default function NewBookPage() {
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               placeholder="Detailed synopsis of the literary work..."
               required
-              className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-[#d4af37]"
+              className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl p-3 text-xs text-[#F5F0E8] placeholder-[#6B6259] focus:outline-none focus:border-[#B58A3A]"
             />
           </div>
         </div>
 
         {/* Pricing & Inventory */}
-        <div className="glass-card p-6 rounded-2xl border border-slate-800 space-y-4">
-          <h3 className="font-serif-luxury text-base font-bold text-slate-100 border-b border-slate-800 pb-3">
-            2. Pricing & Stock Inventory
+        <div className="bg-[#FFFDF9] p-6 rounded-2xl border border-[#DED6CA] space-y-4">
+          <h3 className="font-serif-luxury text-base font-bold text-[#27231F] border-b border-[#DED6CA] pb-3">
+            2. Pricing &amp; Stock Inventory
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
-                Original Price (Rs.) <span className="text-amber-400">*</span>
+              <label className="text-xs font-semibold text-[#27231F] block mb-1">
+                Original Price (Rs.) <span className="text-[#B58A3A]">*</span>
               </label>
               <input
                 type="number"
@@ -276,12 +276,12 @@ export default function NewBookPage() {
                   setFormData({ ...formData, price: Number(e.target.value) })
                 }
                 required
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-[#d4af37]"
+                className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl px-3.5 py-2.5 text-xs text-[#F5F0E8] focus:outline-none focus:border-[#B58A3A]"
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
+              <label className="text-xs font-semibold text-[#27231F] block mb-1">
                 Discount Percentage (%)
               </label>
               <input
@@ -295,13 +295,13 @@ export default function NewBookPage() {
                     discountPercentage: Number(e.target.value),
                   })
                 }
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-[#d4af37]"
+                className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl px-3.5 py-2.5 text-xs text-[#F5F0E8] focus:outline-none focus:border-[#B58A3A]"
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
-                Available Stock <span className="text-amber-400">*</span>
+              <label className="text-xs font-semibold text-[#27231F] block mb-1">
+                Available Stock <span className="text-[#B58A3A]">*</span>
               </label>
               <input
                 type="number"
@@ -314,34 +314,34 @@ export default function NewBookPage() {
                   })
                 }
                 required
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-[#d4af37]"
+                className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl px-3.5 py-2.5 text-xs text-[#F5F0E8] focus:outline-none focus:border-[#B58A3A]"
               />
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between">
-            <span className="text-xs text-slate-400 font-semibold">
+          <div className="p-4 rounded-xl bg-[#1C1917] border border-[#4A3628] flex items-center justify-between">
+            <span className="text-xs text-[#A39A8D] font-semibold">
               Calculated Final Selling Price:
             </span>
-            <span className="font-serif-luxury text-xl font-bold gold-gradient-text">
+            <span className="font-serif-luxury text-xl font-bold text-[#B58A3A]">
               Rs. {computedFinalPrice.toLocaleString()}
             </span>
           </div>
         </div>
 
         {/* Cloudinary Image Upload Section */}
-        <div className="glass-card p-6 rounded-2xl border border-slate-800 space-y-4">
-          <h3 className="font-serif-luxury text-base font-bold text-slate-100 border-b border-slate-800 pb-3">
-            3. Media Assets & Covers
+        <div className="bg-[#FFFDF9] p-6 rounded-2xl border border-[#DED6CA] space-y-4">
+          <h3 className="font-serif-luxury text-base font-bold text-[#27231F] border-b border-[#DED6CA] pb-3">
+            3. Media Assets &amp; Covers
           </h3>
 
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-2">
-              Primary Cover Image <span className="text-amber-400">*</span>
+            <label className="text-xs font-semibold text-[#27231F] block mb-2">
+              Primary Cover Image <span className="text-[#B58A3A]">*</span>
             </label>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
               {formData.coverImage ? (
-                <div className="relative aspect-[3/4] w-24 rounded-lg overflow-hidden border border-[#d4af37]">
+                <div className="relative aspect-[3/4] w-24 rounded-lg overflow-hidden border border-[#B58A3A]">
                   <Image
                     src={formData.coverImage}
                     alt="Cover preview"
@@ -352,7 +352,7 @@ export default function NewBookPage() {
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, coverImage: "", coverImagePublicId: "" })}
-                    className="absolute top-1 right-1 p-1 bg-rose-950/80 text-rose-300 rounded-full"
+                    className="absolute top-1 right-1 p-1 bg-red-900/80 text-red-300 rounded-full"
                   >
                     <X className="w-3 h-3" />
                   </button>
@@ -365,9 +365,9 @@ export default function NewBookPage() {
                   value={formData.coverImage}
                   onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
                   placeholder="Or enter direct Image URL..."
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100"
+                  className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl px-3 py-2 text-xs text-[#F5F0E8] placeholder-[#6B6259]"
                 />
-                <label className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 hover:border-[#d4af37] text-xs font-semibold text-amber-200 cursor-pointer">
+                <label className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#4A3628] border border-[#6B5A4A] hover:border-[#B58A3A] text-xs font-semibold text-[#B58A3A] cursor-pointer">
                   <Upload className="w-4 h-4" />
                   <span>{isUploading ? "Uploading..." : "Upload Cover File"}</span>
                   <input
@@ -383,12 +383,12 @@ export default function NewBookPage() {
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-2">
+            <label className="text-xs font-semibold text-[#27231F] block mb-2">
               Additional Gallery Images (Max 5)
             </label>
             <div className="grid grid-cols-5 gap-2 mb-3">
               {formData.additionalImages.map((img, index) => (
-                <div key={index} className="relative aspect-[3/4] rounded-lg overflow-hidden border border-slate-700">
+                <div key={index} className="relative aspect-[3/4] rounded-lg overflow-hidden border border-[#4A3628]">
                   <Image
                     src={img}
                     alt={`Gallery ${index + 1}`}
@@ -405,14 +405,14 @@ export default function NewBookPage() {
                         additionalImagePublicIds: prev.additionalImagePublicIds.filter((_, i) => i !== index),
                       }));
                     }}
-                    className="absolute top-1 right-1 p-1 bg-rose-950/80 text-rose-300 rounded-full"
+                    className="absolute top-1 right-1 p-1 bg-red-900/80 text-red-300 rounded-full"
                   >
                     <X className="w-3 h-3" />
                   </button>
                 </div>
               ))}
             </div>
-            <label className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 hover:border-[#d4af37] text-xs font-semibold text-amber-200 cursor-pointer">
+            <label className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#4A3628] border border-[#6B5A4A] hover:border-[#B58A3A] text-xs font-semibold text-[#B58A3A] cursor-pointer">
               <Upload className="w-4 h-4" />
               <span>{isUploading ? "Uploading..." : "Upload Gallery Images"}</span>
               <input
@@ -428,14 +428,14 @@ export default function NewBookPage() {
         </div>
 
         {/* Book Specs & Publishing Details */}
-        <div className="glass-card p-6 rounded-2xl border border-slate-800 space-y-4">
-          <h3 className="font-serif-luxury text-base font-bold text-slate-100 border-b border-slate-800 pb-3">
-            4. Publishing & Specifications
+        <div className="bg-[#FFFDF9] p-6 rounded-2xl border border-[#DED6CA] space-y-4">
+          <h3 className="font-serif-luxury text-base font-bold text-[#27231F] border-b border-[#DED6CA] pb-3">
+            4. Publishing &amp; Specifications
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
+              <label className="text-xs font-semibold text-[#27231F] block mb-1">
                 Publisher
               </label>
               <input
@@ -443,12 +443,12 @@ export default function NewBookPage() {
                 value={formData.publisher}
                 onChange={(e) => setFormData({ ...formData, publisher: e.target.value })}
                 placeholder="e.g. Penguin Classics"
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-[#d4af37]"
+                className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl px-3.5 py-2.5 text-xs text-[#F5F0E8] placeholder-[#6B6259] focus:outline-none focus:border-[#B58A3A]"
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
+              <label className="text-xs font-semibold text-[#27231F] block mb-1">
                 ISBN
               </label>
               <input
@@ -456,31 +456,31 @@ export default function NewBookPage() {
                 value={formData.isbn}
                 onChange={(e) => setFormData({ ...formData, isbn: e.target.value })}
                 placeholder="e.g. 978-0140449334"
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-[#d4af37]"
+                className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl px-3.5 py-2.5 text-xs text-[#F5F0E8] placeholder-[#6B6259] focus:outline-none focus:border-[#B58A3A]"
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
+              <label className="text-xs font-semibold text-[#27231F] block mb-1">
                 Language
               </label>
               <input
                 type="text"
                 value={formData.language}
                 onChange={(e) => setFormData({ ...formData, language: e.target.value })}
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-[#d4af37]"
+                className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl px-3.5 py-2.5 text-xs text-[#F5F0E8] focus:outline-none focus:border-[#B58A3A]"
               />
             </div>
           </div>
         </div>
 
         {/* Feature Flags */}
-        <div className="glass-card p-6 rounded-2xl border border-slate-800 space-y-4">
-          <h3 className="font-serif-luxury text-base font-bold text-slate-100 border-b border-slate-800 pb-3">
-            5. Flags & Display Settings
+        <div className="bg-[#FFFDF9] p-6 rounded-2xl border border-[#DED6CA] space-y-4">
+          <h3 className="font-serif-luxury text-base font-bold text-[#27231F] border-b border-[#DED6CA] pb-3">
+            5. Flags &amp; Display Settings
           </h3>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs text-slate-300">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs text-[#27231F] font-medium">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
@@ -488,7 +488,7 @@ export default function NewBookPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, isFeatured: e.target.checked })
                 }
-                className="accent-[#d4af37] w-4 h-4"
+                className="accent-[#B58A3A] w-4 h-4"
               />
               <span>Featured Highlight</span>
             </label>
@@ -500,7 +500,7 @@ export default function NewBookPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, isBestSeller: e.target.checked })
                 }
-                className="accent-[#d4af37] w-4 h-4"
+                className="accent-[#B58A3A] w-4 h-4"
               />
               <span>Best Seller</span>
             </label>
@@ -512,7 +512,7 @@ export default function NewBookPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, isNewArrival: e.target.checked })
                 }
-                className="accent-[#d4af37] w-4 h-4"
+                className="accent-[#B58A3A] w-4 h-4"
               />
               <span>New Arrival</span>
             </label>
@@ -524,7 +524,7 @@ export default function NewBookPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, isActive: e.target.checked })
                 }
-                className="accent-[#d4af37] w-4 h-4"
+                className="accent-[#B58A3A] w-4 h-4"
               />
               <span>Active in Store</span>
             </label>
@@ -535,7 +535,7 @@ export default function NewBookPage() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full py-4 bg-gradient-to-r from-[#d4af37] to-amber-600 text-slate-950 font-bold rounded-xl text-sm hover:brightness-110 disabled:opacity-50 transition-all shadow-lg shadow-amber-500/10"
+          className="w-full py-4 bg-[#4A3628] text-[#B58A3A] font-bold rounded-xl text-sm hover:bg-[#352D27] disabled:opacity-50 transition-all shadow-lg"
         >
           {isSubmitting ? "Saving Book..." : "Publish Book Title"}
         </button>

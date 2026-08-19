@@ -211,8 +211,8 @@ export default function EditBookPage({
 
   if (isLoading) {
     return (
-      <div className="py-20 text-center text-slate-400">
-        <div className="w-8 h-8 border-3 border-[#d4af37] border-t-transparent rounded-full animate-spin mx-auto" />
+      <div className="py-20 text-center">
+        <div className="w-8 h-8 border-3 border-[#B58A3A] border-t-transparent rounded-full animate-spin mx-auto" />
       </div>
     );
   }
@@ -221,72 +221,72 @@ export default function EditBookPage({
     <div className="space-y-6 max-w-4xl mx-auto">
       <Link
         href="/admin/books"
-        className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-amber-200 transition-colors mb-2"
+        className="inline-flex items-center gap-2 text-xs font-semibold text-[#716A61] hover:text-[#B58A3A] transition-colors mb-2"
       >
         <ArrowLeft className="w-4 h-4" />
         <span>Back to Books Inventory</span>
       </Link>
 
       <div>
-        <span className="text-xs uppercase tracking-widest text-[#d4af37] font-semibold">
+        <span className="text-xs uppercase tracking-widest text-[#B58A3A] font-semibold">
           Inventory Modification
         </span>
-        <h1 className="font-serif-luxury text-3xl font-bold text-slate-100 mt-1">
+        <h1 className="font-serif-luxury text-3xl font-bold text-[#27231F] mt-1">
           Edit &quot;{formData.title}&quot;
         </h1>
       </div>
 
       {error && (
-        <div className="p-4 rounded-xl bg-rose-950/80 border border-rose-800 text-rose-200 text-xs font-semibold">
+        <div className="p-4 rounded-xl bg-[#FFEBEE] border border-[#C62828]/30 text-[#C62828] text-xs font-semibold">
           {error}
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Core Book Info */}
-        <div className="glass-card p-6 rounded-2xl border border-slate-800 space-y-4">
-          <h3 className="font-serif-luxury text-base font-bold text-slate-100 border-b border-slate-800 pb-3">
-            1. Title & Authorship
+        <div className="bg-[#FFFDF9] p-6 rounded-2xl border border-[#DED6CA] space-y-4">
+          <h3 className="font-serif-luxury text-base font-bold text-[#27231F] border-b border-[#DED6CA] pb-3">
+            1. Title &amp; Authorship
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
-                Book Title <span className="text-amber-400">*</span>
+              <label className="text-xs font-semibold text-[#27231F] block mb-1">
+                Book Title <span className="text-[#B58A3A]">*</span>
               </label>
               <input
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 required
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-[#d4af37]"
+                className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl px-3.5 py-2.5 text-xs text-[#F5F0E8] focus:outline-none focus:border-[#B58A3A]"
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
-                Author Name <span className="text-amber-400">*</span>
+              <label className="text-xs font-semibold text-[#27231F] block mb-1">
+                Author Name <span className="text-[#B58A3A]">*</span>
               </label>
               <input
                 type="text"
                 value={formData.author}
                 onChange={(e) => setFormData({ ...formData, author: e.target.value })}
                 required
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-[#d4af37]"
+                className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl px-3.5 py-2.5 text-xs text-[#F5F0E8] focus:outline-none focus:border-[#B58A3A]"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
-                Category / Genre <span className="text-amber-400">*</span>
+              <label className="text-xs font-semibold text-[#27231F] block mb-1">
+                Category / Genre <span className="text-[#B58A3A]">*</span>
               </label>
               <select
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                 required
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-[#d4af37]"
+                className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl px-3.5 py-2.5 text-xs text-[#F5F0E8] focus:outline-none focus:border-[#B58A3A]"
               >
                 {categories.map((c) => (
                   <option key={c._id} value={c._id}>
@@ -297,41 +297,41 @@ export default function EditBookPage({
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
+              <label className="text-xs font-semibold text-[#27231F] block mb-1">
                 Slug
               </label>
               <input
                 type="text"
                 value={formData.slug}
                 onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-[#d4af37]"
+                className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl px-3.5 py-2.5 text-xs text-[#F5F0E8] focus:outline-none focus:border-[#B58A3A]"
               />
             </div>
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-1">
-              Description <span className="text-amber-400">*</span>
+            <label className="text-xs font-semibold text-[#27231F] block mb-1">
+              Description <span className="text-[#B58A3A]">*</span>
             </label>
             <textarea
               rows={4}
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               required
-              className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-slate-100 focus:outline-none focus:border-[#d4af37]"
+              className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl p-3 text-xs text-[#F5F0E8] focus:outline-none focus:border-[#B58A3A]"
             />
           </div>
         </div>
 
         {/* Pricing & Stock */}
-        <div className="glass-card p-6 rounded-2xl border border-slate-800 space-y-4">
-          <h3 className="font-serif-luxury text-base font-bold text-slate-100 border-b border-slate-800 pb-3">
-            2. Pricing & Stock Inventory
+        <div className="bg-[#FFFDF9] p-6 rounded-2xl border border-[#DED6CA] space-y-4">
+          <h3 className="font-serif-luxury text-base font-bold text-[#27231F] border-b border-[#DED6CA] pb-3">
+            2. Pricing &amp; Stock Inventory
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
+              <label className="text-xs font-semibold text-[#27231F] block mb-1">
                 Original Price (Rs.)
               </label>
               <input
@@ -342,12 +342,12 @@ export default function EditBookPage({
                   setFormData({ ...formData, price: Number(e.target.value) })
                 }
                 required
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-[#d4af37]"
+                className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl px-3.5 py-2.5 text-xs text-[#F5F0E8] focus:outline-none focus:border-[#B58A3A]"
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
+              <label className="text-xs font-semibold text-[#27231F] block mb-1">
                 Discount Percentage (%)
               </label>
               <input
@@ -361,12 +361,12 @@ export default function EditBookPage({
                     discountPercentage: Number(e.target.value),
                   })
                 }
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-[#d4af37]"
+                className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl px-3.5 py-2.5 text-xs text-[#F5F0E8] focus:outline-none focus:border-[#B58A3A]"
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
+              <label className="text-xs font-semibold text-[#27231F] block mb-1">
                 Available Stock
               </label>
               <input
@@ -380,34 +380,34 @@ export default function EditBookPage({
                   })
                 }
                 required
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-[#d4af37]"
+                className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl px-3.5 py-2.5 text-xs text-[#F5F0E8] focus:outline-none focus:border-[#B58A3A]"
               />
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between">
-            <span className="text-xs text-slate-400 font-semibold">
+          <div className="p-4 rounded-xl bg-[#1C1917] border border-[#4A3628] flex items-center justify-between">
+            <span className="text-xs text-[#A39A8D] font-semibold">
               Calculated Final Selling Price:
             </span>
-            <span className="font-serif-luxury text-xl font-bold gold-gradient-text">
+            <span className="font-serif-luxury text-xl font-bold text-[#B58A3A]">
               Rs. {computedFinalPrice.toLocaleString()}
             </span>
           </div>
         </div>
 
         {/* Media Assets */}
-        <div className="glass-card p-6 rounded-2xl border border-slate-800 space-y-4">
-          <h3 className="font-serif-luxury text-base font-bold text-slate-100 border-b border-slate-800 pb-3">
+        <div className="bg-[#FFFDF9] p-6 rounded-2xl border border-[#DED6CA] space-y-4">
+          <h3 className="font-serif-luxury text-base font-bold text-[#27231F] border-b border-[#DED6CA] pb-3">
             3. Media Assets
           </h3>
 
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-2">
+            <label className="text-xs font-semibold text-[#27231F] block mb-2">
               Cover Image URL
             </label>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
               {formData.coverImage ? (
-                <div className="relative aspect-[3/4] w-24 rounded-lg overflow-hidden border border-[#d4af37]">
+                <div className="relative aspect-[3/4] w-24 rounded-lg overflow-hidden border border-[#B58A3A]">
                   <Image
                     src={formData.coverImage}
                     alt="Cover preview"
@@ -423,9 +423,9 @@ export default function EditBookPage({
                   type="text"
                   value={formData.coverImage}
                   onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100"
+                  className="w-full bg-[#1C1917] border border-[#4A3628] rounded-xl px-3 py-2 text-xs text-[#F5F0E8]"
                 />
-                <label className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 hover:border-[#d4af37] text-xs font-semibold text-amber-200 cursor-pointer">
+                <label className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#4A3628] border border-[#6B5A4A] hover:border-[#B58A3A] text-xs font-semibold text-[#B58A3A] cursor-pointer">
                   <Upload className="w-4 h-4" />
                   <span>{isUploading ? "Uploading..." : "Replace Cover File"}</span>
                   <input
@@ -441,12 +441,12 @@ export default function EditBookPage({
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-2">
+            <label className="text-xs font-semibold text-[#27231F] block mb-2">
               Additional Gallery Images (Max 5)
             </label>
             <div className="grid grid-cols-5 gap-2 mb-3">
               {formData.additionalImages.map((img, index) => (
-                <div key={index} className="relative aspect-[3/4] rounded-lg overflow-hidden border border-slate-700">
+                <div key={index} className="relative aspect-[3/4] rounded-lg overflow-hidden border border-[#4A3628]">
                   <Image
                     src={img}
                     alt={`Gallery ${index + 1}`}
@@ -463,14 +463,14 @@ export default function EditBookPage({
                         additionalImagePublicIds: prev.additionalImagePublicIds.filter((_, i) => i !== index),
                       }));
                     }}
-                    className="absolute top-1 right-1 p-1 bg-rose-950/80 text-rose-300 rounded-full"
+                    className="absolute top-1 right-1 p-1 bg-red-900/80 text-red-300 rounded-full"
                   >
                     <X className="w-3 h-3" />
                   </button>
                 </div>
               ))}
             </div>
-            <label className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 hover:border-[#d4af37] text-xs font-semibold text-amber-200 cursor-pointer">
+            <label className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#4A3628] border border-[#6B5A4A] hover:border-[#B58A3A] text-xs font-semibold text-[#B58A3A] cursor-pointer">
               <Upload className="w-4 h-4" />
               <span>{isUploading ? "Uploading..." : "Upload Gallery Images"}</span>
               <input
@@ -486,12 +486,12 @@ export default function EditBookPage({
         </div>
 
         {/* Feature Flags */}
-        <div className="glass-card p-6 rounded-2xl border border-slate-800 space-y-4">
-          <h3 className="font-serif-luxury text-base font-bold text-slate-100 border-b border-slate-800 pb-3">
-            4. Flags & Visibility
+        <div className="bg-[#FFFDF9] p-6 rounded-2xl border border-[#DED6CA] space-y-4">
+          <h3 className="font-serif-luxury text-base font-bold text-[#27231F] border-b border-[#DED6CA] pb-3">
+            4. Flags &amp; Visibility
           </h3>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs text-slate-300">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs text-[#27231F] font-medium">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
@@ -499,7 +499,7 @@ export default function EditBookPage({
                 onChange={(e) =>
                   setFormData({ ...formData, isFeatured: e.target.checked })
                 }
-                className="accent-[#d4af37] w-4 h-4"
+                className="accent-[#B58A3A] w-4 h-4"
               />
               <span>Featured Highlight</span>
             </label>
@@ -511,7 +511,7 @@ export default function EditBookPage({
                 onChange={(e) =>
                   setFormData({ ...formData, isBestSeller: e.target.checked })
                 }
-                className="accent-[#d4af37] w-4 h-4"
+                className="accent-[#B58A3A] w-4 h-4"
               />
               <span>Best Seller</span>
             </label>
@@ -523,7 +523,7 @@ export default function EditBookPage({
                 onChange={(e) =>
                   setFormData({ ...formData, isNewArrival: e.target.checked })
                 }
-                className="accent-[#d4af37] w-4 h-4"
+                className="accent-[#B58A3A] w-4 h-4"
               />
               <span>New Arrival</span>
             </label>
@@ -535,7 +535,7 @@ export default function EditBookPage({
                 onChange={(e) =>
                   setFormData({ ...formData, isActive: e.target.checked })
                 }
-                className="accent-[#d4af37] w-4 h-4"
+                className="accent-[#B58A3A] w-4 h-4"
               />
               <span>Active in Store</span>
             </label>
@@ -545,7 +545,7 @@ export default function EditBookPage({
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full py-4 bg-gradient-to-r from-[#d4af37] to-amber-600 text-slate-950 font-bold rounded-xl text-sm hover:brightness-110 disabled:opacity-50 transition-all shadow-lg shadow-amber-500/10"
+          className="w-full py-4 bg-[#4A3628] text-[#B58A3A] font-bold rounded-xl text-sm hover:bg-[#352D27] disabled:opacity-50 transition-all shadow-lg"
         >
           {isSubmitting ? "Saving Changes..." : "Update Book Details"}
         </button>

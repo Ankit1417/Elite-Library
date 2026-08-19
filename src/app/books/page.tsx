@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useState, useTransition } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { fetchApi } from "@/lib/api";
 import { getCategories } from "@/lib/categories";
 import Navbar from "@/components/Navbar";
@@ -28,6 +28,7 @@ interface BookData {
 }
 
 function BooksCatalogContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [, startTransition] = useTransition();
 
@@ -37,19 +38,43 @@ function BooksCatalogContent() {
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Filters state
+  // Filters state - URL is the source of truth
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [categorySlug, setCategorySlug] = useState(searchParams.get("category") || "");
   const [inStockOnly, setInStockOnly] = useState(searchParams.get("inStock") === "true");
   const [isFeaturedOnly, setIsFeaturedOnly] = useState(searchParams.get("isFeatured") === "true");
   const [isNewArrivalOnly, setIsNewArrivalOnly] = useState(searchParams.get("isNewArrival") === "true");
   const [isBestSellerOnly, setIsBestSellerOnly] = useState(searchParams.get("isBestSeller") === "true");
-  const [sort, setSort] = useState(searchParams.get("sort") || "newest");
+  const [sort, setSort] = useState(searchParams.get("sort") || "top-rated");
   const [page, setPage] = useState(1);
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
+  const [minPrice, setMinPrice] = useState(searchParams.get("minPrice") || "");
+  const [maxPrice, setMaxPrice] = useState(searchParams.get("maxPrice") || "");
 
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+
+  // Synchronize state whenever URL searchParams change (e.g. Navbar category navigation)
+  useEffect(() => {
+    const urlCategory = searchParams.get("category") || "";
+    const urlSearch = searchParams.get("search") || "";
+    const urlSort = searchParams.get("sort") || "top-rated";
+    const urlInStock = searchParams.get("inStock") === "true";
+    const urlIsFeatured = searchParams.get("isFeatured") === "true";
+    const urlIsNewArrival = searchParams.get("isNewArrival") === "true";
+    const urlIsBestSeller = searchParams.get("isBestSeller") === "true";
+    const urlMinPrice = searchParams.get("minPrice") || "";
+    const urlMaxPrice = searchParams.get("maxPrice") || "";
+
+    setCategorySlug(urlCategory);
+    setSearch(urlSearch);
+    setSort(urlSort);
+    setInStockOnly(urlInStock);
+    setIsFeaturedOnly(urlIsFeatured);
+    setIsNewArrivalOnly(urlIsNewArrival);
+    setIsBestSellerOnly(urlIsBestSeller);
+    setMinPrice(urlMinPrice);
+    setMaxPrice(urlMaxPrice);
+    setPage(1);
+  }, [searchParams]);
 
   useEffect(() => {
     async function loadCategories() {
@@ -127,7 +152,21 @@ function BooksCatalogContent() {
     maxPrice,
   ]);
 
+  const handleCategoryChange = (newCat: string) => {
+    setCategorySlug(newCat);
+    setPage(1);
+    const params = new URLSearchParams(searchParams.toString());
+    if (newCat) {
+      params.set("category", newCat);
+    } else {
+      params.delete("category");
+    }
+    const queryString = params.toString();
+    router.push(`/books${queryString ? `?${queryString}` : ""}`, { scroll: false });
+  };
+
   const resetFilters = () => {
+    router.push("/books", { scroll: false });
     setSearch("");
     setCategorySlug("");
     setInStockOnly(false);
@@ -136,7 +175,7 @@ function BooksCatalogContent() {
     setIsBestSellerOnly(false);
     setMinPrice("");
     setMaxPrice("");
-    setSort("newest");
+    setSort("top-rated");
     setPage(1);
   };
 
@@ -177,6 +216,7 @@ function BooksCatalogContent() {
               }}
               className="bg-[#FFFDF8] border border-[#DED6C8] text-[#26231F] text-xs rounded-xl px-3 py-2.5 focus:outline-none focus:border-[#B58A3A] shadow-xs"
             >
+              <option value="top-rated">Top Rated</option>
               <option value="newest">Sort by Newest</option>
               <option value="price-asc">Price: Low to High</option>
               <option value="price-desc">Price: High to Low</option>
@@ -226,10 +266,7 @@ function BooksCatalogContent() {
             </label>
             <select
               value={categorySlug}
-              onChange={(e) => {
-                setCategorySlug(e.target.value);
-                setPage(1);
-              }}
+              onChange={(e) => handleCategoryChange(e.target.value)}
               className="w-full bg-[#F8F5EF] border border-[#DED6C8] rounded-xl px-3 py-2 text-xs text-[#26231F] focus:outline-none focus:border-[#B58A3A]"
             >
               <option value="">All Categories</option>
@@ -374,10 +411,7 @@ function BooksCatalogContent() {
               <label className="text-xs font-semibold text-[#26231F] block mb-2">Category</label>
               <select
                 value={categorySlug}
-                onChange={(e) => {
-                  setCategorySlug(e.target.value);
-                  setPage(1);
-                }}
+                onChange={(e) => handleCategoryChange(e.target.value)}
                 className="w-full bg-[#F8F5EF] border border-[#DED6C8] rounded-xl px-3 py-2 text-xs text-[#26231F]"
               >
                 <option value="">All Categories</option>

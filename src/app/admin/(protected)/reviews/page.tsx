@@ -19,7 +19,7 @@ interface AdminReview {
   };
   rating: number;
   title?: string;
-  comment: string;
+  comment?: string;
   isVerifiedPurchase: boolean;
   status: "published" | "hidden" | "rejected";
   createdAt: string;
@@ -306,9 +306,15 @@ export default function AdminReviewsPage() {
                         {review.title}
                       </span>
                     )}
-                    <span className="text-[11px] text-[#716A61] line-clamp-2">
-                      {review.comment}
-                    </span>
+                    {review.comment && review.comment.trim() ? (
+                      <span className="text-[11px] text-[#716A61] line-clamp-2">
+                        {review.comment}
+                      </span>
+                    ) : (
+                      <span className="text-[11px] italic text-[#9A9188]">
+                        (Rating only)
+                      </span>
+                    )}
                   </td>
 
                   <td className="px-4 py-3">

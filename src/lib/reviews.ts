@@ -12,7 +12,7 @@ export interface Review {
   };
   rating: number;
   title?: string;
-  comment: string;
+  comment?: string;
   isVerifiedPurchase: boolean;
   status: ReviewStatus;
   createdAt: string;
@@ -48,7 +48,7 @@ export interface ReviewsResult {
 export interface ReviewInput {
   rating: number;
   title?: string;
-  comment: string;
+  comment?: string;
 }
 
 export async function getBookReviews(
